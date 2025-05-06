@@ -1,0 +1,208 @@
+git remote add origin https://github.com/Tarikmetahubeth/nomadia-landing.git
+git add .
+git commit -m "Initial commit – Nomadia landing page"
+import React, { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
+import { CheckCircle, User, Key, MapPin, Shield, ArrowUp } from "lucide-react";
+
+// Complete translations object
+const translations = {
+  en: {
+    heroTitle: "Nomadia: Revolutionizing Local OTC",
+    heroSubtitle: "Fast, Secure & Revenue-Generating Crypto Exchange",
+    cta: "Get Started on Telegram",
+    featuresTitle: "User Solutions",
+    features: [
+      { title: "Instant Matching", desc: "Find trusted buyers & sellers in minutes." },
+      { title: "20% Affiliate Revenue", desc: "Available only to those who refer new users or our contracted OTC partners." },
+      { title: "Transparent Trades", desc: "Secure, blockchain-verifiable swaps." }
+    ],
+    testimonialsTitle: "User Experiences",
+    testimonials: [
+      { user: "Ayse, Turkey", text: "I was losing a lot due to currency differences while trading in Vietnam. Nomadia matched me at the best rate!" },
+      { user: "John, Thailand", text: "Finding a local exchanger was difficult and risky. Nomadia’s secure QR swap saved the day." },
+      { user: "Li Wei, Bali", text: "Banks were too slow; with Nomadia I completed trades in minutes with minimal fees." }
+    ],
+    socialProof: "ETHGlobal Taipei Top 8 Finalist",
+    stepsTitle: "OTC in 3 Simple Steps",
+    steps: ["Open Mini App", "Match & Confirm", "Secure QR Swap"],
+    protocolTitle: "Secure Swap Flow",
+    protocolSteps: [
+      "Buyer and seller connect via the Nomadia Mini App.",
+      "When buyer accepts, a TON MiniApp signature is made on-chain.",
+      "System sends a location to both parties; non-affiliates get a busy city spot.",
+      "Upon completion, seller signs and TVL is recorded on-chain for security."
+    ],
+    faqTitle: "Frequently Asked Questions",
+    faqs: [
+      { q: "Is KYC required?", a: "No, Nomadia operates KYC-free for speed." },
+      { q: "What are the fees?", a: "0.025% fee; affiliate payments are only for those referring new users or our contracted OTC partners." },
+      { q: "Do I need to be an OTC partner?", a: "No, you don’t need to be a partner to buy or sell; anyone can trade anytime." }
+    ],
+    privacyTitle: "Privacy Policy & Data Protection",
+    privacyContent: `**Europe (GDPR):**\nWe collect minimal personal data (email for newsletter) stored securely. You have the right to access, rectify, or erase your data under the GDPR. Data is processed only for service improvement and communications.\n\n**Turkey (KVKK):**\nPersonal data is collected solely for newsletter subscription and stored in compliance with KVKK. You may request deletion at any time.`,
+    termsTitle: "Terms of Service",
+    termsContent: `By using Nomadia, you agree to our platform rules: no illicit activity, respect other users, and accept transaction fees of 0.025%. We reserve the right to suspend accounts for violations.\n\n**Affiliate & Partner Agreement:**\nOnly contracted OTC partners and referrers qualify for affiliate revenue. All other users trade without affiliation.`,
+    footer: "© 2025 Nomadia. Powered by Web3 Meta Hub.",
+    links: ["Privacy", "Terms", "Contact"]
+  },
+  tr: {
+    heroTitle: "Nomadia: Yerel OTC’de Devrim",
+    heroSubtitle: "Hızlı, Güvenli ve Gelir Getiren Kripto Takas Platformu",
+    cta: "Telegram’da Başla",
+    featuresTitle: "Kullanıcı Çözümleri",
+    features: [
+      { title: "Anında Eşleşme", desc: "Dakikalar içinde güvenilir alıcı ve satıcı eşleştirme." },
+      { title: "%20 Affiliate Geliri", desc: "Yalnızca yeni kullanıcı getirenler ve sözleşmeli OTC partnerler için." },
+      { title: "Şeffaf İşlemler", desc: "Blockchain üzerinde izlenebilir, güvenli takaslar." }
+    ],
+    testimonialsTitle: "Kullanıcı Deneyimleri",
+    testimonials: [
+      { user: "Ayşe, Türkiye", text: "Döviz kuru farkları yüzünden Vietnam'da işlem yaparken kayıp yaşıyordum. Nomadia sayesinde en iyi kurdan eşleştim!" },
+      { user: "John, Thailand", text: "Yerel exchanger bulmak riskliydi. Nomadia’nın güvenli QR takası kurtardı." },
+      { user: "Li Wei, Bali", text: "Bankalar çok yavaş; Nomadia ile dakikalar içinde işlem tamamladım." }
+    ],
+    socialProof: "ETHGlobal Taipei İlk 8 Finale Kaldı",
+    stepsTitle: "3 Basit Adımda OTC",
+    steps: ["Mini App’i Aç", "Eşleş & Onayla", "QR ile Güvenli Takas"],
+    protocolTitle: "Güvenli Takas Akışı",
+    protocolSteps: [
+      "Alıcı ve satıcı Nomadia Mini App ile bağlanır.",
+      "Alıcı kabul edince TON MiniApp ile zincirde imzalanır.",
+      "Sistem, resmi affiliate olmayanlara kalabalık nokta seçer.",
+      "Satıcı imzalar ve TVL zincirde kaydedilir."
+    ],
+    faqTitle: "Sıkça Sorulan Sorular",
+    faqs: [
+      { q: "KYC gerekli mi?", a: "Hayır, KYC yok, hızlı işlem." },
+      { q: "Ücretler nasıl?", a: "0.025% ücret; affiliate yalnızca sözleşmeli partnerlere verilir." },
+      { q: "Partner olmak zorunlu mu?", a: "Hayır, dilediğin zaman işlem yapabilirsin." }
+    ],
+    privacyTitle: "Gizlilik Politikası & Veri Koruma",
+    privacyContent: `**Türkiye (KVKK):**\nKişisel verileriniz (e-posta) yalnızca haber bülteni amaçlı toplanır ve KVKK kapsamında güvenle saklanır. Dilediğiniz zaman verilerinizin silinmesini isteyebilirsiniz.\n\n**Avrupa (GDPR):**\nVeri işleme faaliyetlerimiz GDPR’a uygundur. Verilerinize erişme, düzeltme veya silme haklarınız saklıdır.`,
+    termsTitle: "Hizmet Şartları",
+    termsContent: `Nomadia'yı kullanarak şu kuralları kabul etmiş olursunuz: yasadışı faaliyet yok, diğer kullanıcılara saygı, %0.025 işlem ücretlerini kabul. İhlalde bulunan hesaplar askıya alınabilir.\n\n**Affiliate & Partner Sözleşmesi:**\nYalnızca sözleşmeli OTC partnerler ve yeni kullanıcı getirenler affiliate geliri alır. Diğer kullanıcılar normal işlem yapar.`,
+    footer: "© 2025 Nomadia. Web3 Meta Hub tarafından desteklenmektedir.",
+    links: ["Gizlilik", "Şartlar", "İletişim"]
+  },
+  zh: {
+    heroTitle: "Nomadia：革新本地 OTC",
+    heroSubtitle: "快速、安全、创收的加密货币交易平台",
+    cta: "在 Telegram 上开始",
+    featuresTitle: "用户解决方案",
+    features: [
+      { title: "即时匹配", desc: "几分钟内找到可信买家和卖家。" },
+      { title: "20% 联盟收入", desc: "仅限推荐新用户或签约 OTC 合作伙伴。" },
+      { title: "透明交易", desc: "区块链可验证的安全交换。" }
+    ],
+    testimonialsTitle: "用户体验",
+    testimonials: [
+      { user: "Ayse，土耳其", text: "在越南交易时汇率损失严重。Nomadia 帮我以最佳汇率完成匹配！" },
+      { user: "John，泰国", text: "本地兑换所风险大。Nomadia 安全的 QR 交换拯救了我。" },
+      { user: "Li Wei，巴厘岛", text: "银行太慢；Nomadia 几分钟完成交易。" }
+    ],
+    socialProof: "ETHGlobal Taipei 前8强入围者",
+    stepsTitle: "三步完成 OTC",
+    steps: ["打开 Mini App", "匹配并确认", "安全 QR 交换"],
+    protocolTitle: "安全交换流程",
+    protocolSteps: [
+      "买家和卖家通过 Nomadia Mini App 连接。",
+      "买家接受后，通过 TON MiniApp 链上签名。",
+      "系统为非联盟用户选择繁忙地标。",
+      "卖家签名并将 TVL 数据记录在链上。"
+    ],
+    faqTitle: "常见问题",
+    faqs: [
+      { q: "需要 KYC 吗？", a: "无需 KYC，极速交易。" },
+      { q: "收费如何？", a: "0.025%；联盟收入仅限签约伙伴。" },
+      { q: "必须成为伙伴吗？", a: "不需要，任何人都可交易。" }
+    ],
+    privacyTitle: "隐私政策与数据保护",
+    privacyContent: `**欧洲 (GDPR)：**\n我们仅收集必要的个人数据（订阅邮件），并安全存储。您有权根据GDPR访问、更正或删除您的数据。\n\n**土耳其 (KVKK)：**\n您的个人数据仅用于新闻通讯，依据KVKK安全保存。您可随时请求删除数据。`,
+    termsTitle: "服务条款",
+    termsContent: `使用Nomadia即表示您同意以下规则：禁止非法活动，尊重其他用户，并接受0.025%的交易费。违反规则的账户可能被暂停。\n\n**联盟及合作伙伴协议：**\n仅签约OTC合作伙伴和推荐者可获得联盟收益。其他用户以普通方式交易。`,
+    footer: "© 2025 Nomadia。Web3 Meta Hub 提供支持。",
+    links: ["隐私政策", "使用条款", "联系"]
+  }
+};
+
+export default function NomadiaLandingPage() {
+  const [lang, setLang] = useState("en");
+  const [showTop, setShowTop] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const t = translations[lang];
+
+  useEffect(() => {
+    const onScroll = () => {
+      setShowTop(window.scrollY > 300);
+      const total = document.body.scrollHeight - window.innerHeight;
+      setScrollProgress(total > 0 ? (window.scrollY / total) * 100 : 0);
+    };
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+
+  return (
+    <div className="bg-blue-50 text-blue-900 min-h-screen">
+      {/* Sticky Header */}
+      <header className="sticky top-0 z-50 bg-gradient-to-r from-blue-700 to-blue-500 shadow p-6 text-white">
+        <div className="max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between">
+          <div>
+            <h1 className="text-4xl md:text-5xl font-extrabold">{t.heroTitle}</h1>
+            <p className="mt-1 text-md md:text-xl">{t.heroSubtitle}</p>
+          </div>
+          <nav className="mt-4 md:mt-0 space-x-2">
+            {/* Home button scrolls to top */}
+            <Button size="sm" aria-label="Home" className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded" onClick={() => scrollToTop()}>Home</Button>
+            <Button size="sm" aria-label="Turkish" className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded" onClick={() => setLang("tr")}>TR</Button>
+            <Button size="sm" aria-label="English" className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded" onClick={() => setLang("en")}>EN</Button>
+            <Button size="sm" aria-label="Chinese" className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded" onClick={() => setLang("zh")}>中文</Button>
+          </nav>
+        </div>
+      </header>
+
+      {/* Scroll Progress Bar */}
+      <div className="fixed top-16 left-0 w-full h-1 bg-blue-200 z-40">
+        <div className="h-1 bg-blue-600" style={{ width: `${scrollProgress}%` }} />
+      </div>
+
+      <main className="max-w-4xl mx-auto p-6 space-y-12">
+        {/* Privacy Section */}
+        <section id="privacy" className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-2xl font-bold text-blue-800 mb-2">{t.privacyTitle}</h2>
+          <div className="prose text-blue-700 whitespace-pre-wrap">{t.privacyContent}</div>
+        </section>
+
+        {/* Terms Section */}
+        <section id="terms" className="bg-white p-6 rounded-lg shadow">
+          <h2 className="text-2xl font-bold text-blue-800 mb-2">{t.termsTitle}</h2>
+          <div className="prose text-blue-700 whitespace-pre-wrap">{t.termsContent}</div>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-blue-700 text-center p-4 text-sm text-blue-100">
+        <p>{t.footer}</p>
+        <div className="space-x-4 mt-2">
+          <a href="#privacy" className="underline">{t.links[0]}</a>
+          <a href="#terms" className="underline">{t.links[1]}</a>
+          <a href="#" className="underline">{t.links[2]}</a>
+        </div>
+      </footer>
+
+      {/* Back to Top Button */}
+      {showTop && (
+        <button onClick={scrollToTop} className="fixed bottom-4 right-4 bg-blue-600 p-3 rounded-full shadow-lg text-white">
+          <ArrowUp />
+        </button>
+      )}
+    </div>
+  );
+}
+git branch -M main      # 
+git push -u origin main #
